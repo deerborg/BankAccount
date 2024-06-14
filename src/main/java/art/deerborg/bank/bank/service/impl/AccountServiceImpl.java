@@ -8,6 +8,9 @@ import art.deerborg.bank.common.util.exceptions.NotFoundIdException;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import art.deerborg.bank.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,14 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final AmqpTemplate amqpTemplate;
+    private final DirectExchange exchange;
+
+    @Value("${sample.rabbitmq.routingKey}")
+    String routingKey;
+
+    @Value("${sample.rabbitmq.queue}")
+    String queueName;
 
     @Override
     public AccountEntity addAccount(AccountEntity account) {
@@ -61,6 +72,7 @@ public class AccountServiceImpl implements AccountService {
         }
         sendingAccount.setBalance(account.getBalance());
         senderAccount.setBalance(senderAccount.getBalance() - account.getBalance());
+
         accountRepository.save(sendingAccount);
         return accountRepository.save(senderAccount);
     }
