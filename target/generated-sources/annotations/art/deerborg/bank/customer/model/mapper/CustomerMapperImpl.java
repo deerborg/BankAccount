@@ -1,5 +1,6 @@
 package art.deerborg.bank.customer.model.mapper;
 
+import art.deerborg.bank.customer.model.dto.request.CustomerCreateAccountRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-14T06:24:29+0300",
+    date = "2024-06-15T03:03:32+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -46,6 +47,19 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerEntity.setEmail( customerUpdateRequest.getEmail() );
         customerEntity.setPhone( customerUpdateRequest.getPhone() );
         customerEntity.setPassword( customerUpdateRequest.getPassword() );
+
+        return customerEntity;
+    }
+
+    @Override
+    public CustomerEntity fromCustomerCreateAccountRequest(CustomerCreateAccountRequest customerCreateAccountRequest) {
+        if ( customerCreateAccountRequest == null ) {
+            return null;
+        }
+
+        CustomerEntity customerEntity = new CustomerEntity();
+
+        customerEntity.setId( customerCreateAccountRequest.getId() );
 
         return customerEntity;
     }

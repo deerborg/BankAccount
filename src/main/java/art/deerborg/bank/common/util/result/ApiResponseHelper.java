@@ -16,6 +16,16 @@ public class ApiResponseHelper {
     }
 
     public static <T> ApiResponse <T> NOT_FOUND_ID(){
-        return new ApiResponse<>(false,"Not Found ID", null);
+        return new ApiResponse<>(false,"Not Found ID");
+    }
+
+    public static <T> ApiResponse <T> INVALID_BALANCE(){
+        return new ApiResponse<>(false,"Invalid Balance");
+    }
+    public static <T> ApiResponse <T> INSUFFICIENT_BALANCE(){
+        return new ApiResponse<>(false,"Insufficient Balance");
+    }
+    public static <T> ApiResponse <T> ACTIVE_ACCOUNT(){
+        return new ApiResponse<>(false,"Account is already active");
     }
 }

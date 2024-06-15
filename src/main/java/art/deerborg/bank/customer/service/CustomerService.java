@@ -1,6 +1,7 @@
 package art.deerborg.bank.customer.service;
 
 import art.deerborg.bank.common.util.result.ApiResponse;
+import art.deerborg.bank.customer.model.dto.request.CustomerCreateAccountRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
@@ -17,5 +18,7 @@ public interface CustomerService {
     ResponseEntity<ApiResponse<List<CustomerDetailResponse>>> getAllCustomers();
 
     ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomerById(String customerId);
+
+    ResponseEntity<ApiResponse<CustomerResponse>> activeAccount(CustomerCreateAccountRequest request);
 
 }

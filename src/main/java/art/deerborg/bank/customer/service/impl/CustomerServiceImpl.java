@@ -1,14 +1,17 @@
 package art.deerborg.bank.customer.service.impl;
 
+import art.deerborg.bank.bank.repository.AccountRepository;
 import art.deerborg.bank.common.util.exceptions.NotFoundIdException;
 import art.deerborg.bank.common.util.result.ApiResponse;
 import art.deerborg.bank.common.util.result.ApiResponseHelper;
+import art.deerborg.bank.customer.model.dto.request.CustomerCreateAccountRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import art.deerborg.bank.customer.model.mapper.CustomerMapper;
+import art.deerborg.bank.customer.model.util.excepiton.ActiveAccountException;
 import art.deerborg.bank.customer.repository.CustomerRepository;
 import art.deerborg.bank.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +27,12 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper mapper;
     private final CustomerRepository customerRepository;
 
+
     @Override
     public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(CustomerCreateRequest request) {
         CustomerEntity entity = mapper.fromCustomerCreateRequest(request);
         entity.setFullName(request.getFirstName() + " " + request.getLastName());
+        entity.setActiveAccount(false);
         CustomerResponse response = mapper.toCustomerResponse(customerRepository.save(entity));
         return new ResponseEntity<>(ApiResponseHelper.CREATE(response), HttpStatus.CREATED);
     }
@@ -48,5 +53,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomerById(String customerId) {
         return new ResponseEntity<>(ApiResponseHelper.OK(mapper.toCustomerDetailResponse(customerRepository.findById(customerId).orElseThrow(NotFoundIdException::new))), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<CustomerResponse>> activeAccount(CustomerCreateAccountRequest request) {
+        CustomerEntity entity = customerRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
+
+        if (entity.isActiveAccount()) {
+            throw new ActiveAccountException();
+        }
+        entity.setActiveAccount(true);
+
+        CustomerResponse response = mapper.toCustomerResponse(entity);
+
+        return new ResponseEntity<>(ApiResponseHelper.UPDATED(response), HttpStatus.OK);
     }
 }

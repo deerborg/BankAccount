@@ -1,5 +1,6 @@
 package art.deerborg.bank.customer.model.mapper;
 
+import art.deerborg.bank.customer.model.dto.request.CustomerCreateAccountRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
@@ -11,7 +12,7 @@ import org.mapstruct.Mapper;
 public interface CustomerMapper {
     CustomerEntity fromCustomerCreateRequest(CustomerCreateRequest customerCreateRequest);
     CustomerEntity fromCustomerUpdateRequest(CustomerUpdateRequest customerUpdateRequest);
-
+    CustomerEntity fromCustomerCreateAccountRequest(CustomerCreateAccountRequest customerCreateAccountRequest);
 
 
     CustomerResponse toCustomerResponse(CustomerEntity entity);

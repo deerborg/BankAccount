@@ -32,6 +32,8 @@ public class CustomerEntity {
     @Column(unique = true)
     private String phone;
 
+    private boolean activeAccount;
+
     private String password;
     @OneToOne(mappedBy = "customer",cascade = CascadeType.ALL)
     @JsonIgnore
