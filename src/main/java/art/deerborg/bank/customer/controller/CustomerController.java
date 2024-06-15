@@ -6,6 +6,7 @@ import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
 import art.deerborg.bank.customer.service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,15 @@ public class CustomerController {
     private final CustomerService service;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(@RequestBody CustomerCreateRequest request) {
+    public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
         return service.createCustomer(request);
     }
     @PutMapping
-    public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@RequestBody CustomerUpdateRequest request) {
+    public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@Valid @RequestBody CustomerUpdateRequest request) {
         return service.updateCustomer(request);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomer(@PathVariable("id") String customerId) {
+    public ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomer(@Valid @PathVariable("id") String customerId) {
         return service.getCustomerById(customerId);
     }
     @GetMapping
