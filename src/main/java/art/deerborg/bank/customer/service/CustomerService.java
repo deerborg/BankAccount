@@ -6,6 +6,7 @@ import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
+import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -19,6 +20,6 @@ public interface CustomerService {
 
     ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomerById(String customerId);
 
-    ResponseEntity<ApiResponse<CustomerResponse>> activeAccount(CustomerCreateAccountRequest request);
+    CustomerEntity getByEmail(String email);
 
 }

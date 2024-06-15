@@ -5,6 +5,7 @@ import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
+import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import art.deerborg.bank.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService service;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
         return service.createCustomer(request);
     }

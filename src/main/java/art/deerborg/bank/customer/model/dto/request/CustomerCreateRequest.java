@@ -29,8 +29,6 @@ public class CustomerCreateRequest {
     @NotBlank
     private String lastName;
     @NotNull
-    @NotEmpty
-    @NotBlank
     @Temporal(TemporalType.DATE)
     private LocalDate birthDate;
     @NotNull

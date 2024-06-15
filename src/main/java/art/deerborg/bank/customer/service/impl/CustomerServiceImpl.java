@@ -10,6 +10,7 @@ import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
+import art.deerborg.bank.customer.model.entity.enums.Role;
 import art.deerborg.bank.customer.model.mapper.CustomerMapper;
 import art.deerborg.bank.customer.model.util.excepiton.ActiveAccountException;
 import art.deerborg.bank.customer.repository.CustomerRepository;
@@ -17,6 +18,7 @@ import art.deerborg.bank.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,14 +28,25 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper mapper;
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(CustomerCreateRequest request) {
         CustomerEntity entity = mapper.fromCustomerCreateRequest(request);
+
         entity.setFullName(request.getFirstName() + " " + request.getLastName());
-        entity.setActiveAccount(false);
+
+        entity.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        entity.setEnabled(true);
+        entity.setAccountNonExpired(true);
+        entity.setAccountNonLocked(true);
+        entity.setCredentialsNonExpired(true);
+        entity.setRoles(List.of(Role.CUSTOMER));
+
         CustomerResponse response = mapper.toCustomerResponse(customerRepository.save(entity));
+
         return new ResponseEntity<>(ApiResponseHelper.CREATE(response), HttpStatus.CREATED);
     }
 
@@ -42,30 +55,26 @@ public class CustomerServiceImpl implements CustomerService {
         if (!customerRepository.existsById(request.getId())) {
             throw new NotFoundIdException();
         }
-        return new ResponseEntity<>(ApiResponseHelper.UPDATED(mapper.toCustomerResponse(customerRepository.save(mapper.fromCustomerUpdateRequest(request)))), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponseHelper.UPDATED(mapper
+                .toCustomerResponse(customerRepository
+                        .save(mapper.fromCustomerUpdateRequest(request)))), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<ApiResponse<List<CustomerDetailResponse>>> getAllCustomers() {
-        return new ResponseEntity<>(ApiResponseHelper.OK(customerRepository.findAll().stream().map(mapper::toCustomerDetailResponse).toList()), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponseHelper.OK(customerRepository
+                .findAll().stream().map(mapper::toCustomerDetailResponse).toList()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomerById(String customerId) {
-        return new ResponseEntity<>(ApiResponseHelper.OK(mapper.toCustomerDetailResponse(customerRepository.findById(customerId).orElseThrow(NotFoundIdException::new))), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponseHelper.OK(mapper
+                .toCustomerDetailResponse(customerRepository
+                        .findById(customerId).orElseThrow(NotFoundIdException::new))), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<CustomerResponse>> activeAccount(CustomerCreateAccountRequest request) {
-        CustomerEntity entity = customerRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
-
-        if (entity.isActiveAccount()) {
-            throw new ActiveAccountException();
-        }
-        entity.setActiveAccount(true);
-
-        CustomerResponse response = mapper.toCustomerResponse(entity);
-
-        return new ResponseEntity<>(ApiResponseHelper.UPDATED(response), HttpStatus.OK);
+    public CustomerEntity getByEmail(String email) {
+        return customerRepository.findByEmail(email).orElseThrow();
     }
 }

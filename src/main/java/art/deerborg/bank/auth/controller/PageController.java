@@ -6,7 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
     @GetMapping("/welcome")
-    public String welcome(){
+    public String welcome() {
         return "welcome";
     }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
 }
