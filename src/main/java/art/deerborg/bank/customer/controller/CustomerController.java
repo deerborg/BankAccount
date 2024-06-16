@@ -36,4 +36,5 @@ public class CustomerController {
     public ResponseEntity<ApiResponse<List<CustomerDetailResponse>>> getAllCustomers() {
         return service.getAllCustomers();
     }
+
 }

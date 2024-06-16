@@ -20,6 +20,4 @@ public interface CustomerService {
 
     ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomerById(String customerId);
 
-    CustomerEntity getByEmail(String email);
-
 }

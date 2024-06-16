@@ -1,10 +1,9 @@
 package art.deerborg.bank.customer.service.impl;
 
-import art.deerborg.bank.bank.repository.AccountRepository;
+
 import art.deerborg.bank.common.util.exceptions.NotFoundIdException;
 import art.deerborg.bank.common.util.result.ApiResponse;
 import art.deerborg.bank.common.util.result.ApiResponseHelper;
-import art.deerborg.bank.customer.model.dto.request.CustomerCreateAccountRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
@@ -12,7 +11,6 @@ import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import art.deerborg.bank.customer.model.entity.enums.Role;
 import art.deerborg.bank.customer.model.mapper.CustomerMapper;
-import art.deerborg.bank.customer.model.util.excepiton.ActiveAccountException;
 import art.deerborg.bank.customer.repository.CustomerRepository;
 import art.deerborg.bank.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -73,8 +71,4 @@ public class CustomerServiceImpl implements CustomerService {
                         .findById(customerId).orElseThrow(NotFoundIdException::new))), HttpStatus.OK);
     }
 
-    @Override
-    public CustomerEntity getByEmail(String email) {
-        return customerRepository.findByEmail(email).orElseThrow();
-    }
 }

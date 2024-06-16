@@ -1,4 +1,4 @@
-package art.deerborg.bank.auth.config;
+package art.deerborg.bank.auth.config.encoder;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
