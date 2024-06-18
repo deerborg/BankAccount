@@ -19,5 +19,14 @@ public class PageController {
     public String login() {
         return "login";
     }
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
 
 }

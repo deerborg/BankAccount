@@ -1,6 +1,7 @@
 package art.deerborg.bank.customer.service.impl;
 
 
+import art.deerborg.bank.auth.service.JwtService;
 import art.deerborg.bank.common.util.exceptions.NotFoundIdException;
 import art.deerborg.bank.common.util.result.ApiResponse;
 import art.deerborg.bank.common.util.result.ApiResponseHelper;
@@ -16,6 +17,9 @@ import art.deerborg.bank.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,8 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper mapper;
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
 
     @Override

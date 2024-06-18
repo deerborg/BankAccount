@@ -1,6 +1,8 @@
 package art.deerborg.bank.customer.controller;
 
+import art.deerborg.bank.auth.service.JwtService;
 import art.deerborg.bank.common.util.result.ApiResponse;
+import art.deerborg.bank.common.util.result.ApiResponseHelper;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
@@ -9,7 +11,11 @@ import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import art.deerborg.bank.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService service;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
@@ -36,5 +44,18 @@ public class CustomerController {
     public ResponseEntity<ApiResponse<List<CustomerDetailResponse>>> getAllCustomers() {
         return service.getAllCustomers();
     }
+    @PostMapping("/generateToken")
+    public ResponseEntity<ApiResponse<String>> generateToken(@RequestBody CustomerEntity customer){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(customer.getEmail(), customer.getPassword()));
+        if(authentication.isAuthenticated()){
+            //return jwtService.generateToken(customer.getEmail());
+            return new ResponseEntity<>(ApiResponseHelper.OK(jwtService.generateToken(customer.getEmail())), HttpStatus.OK);
+        }
+        throw new RuntimeException("Authentication failed");
+    }
 
+    @GetMapping("/test")
+    public String getTest(){
+        return "work";
+    }
 }
