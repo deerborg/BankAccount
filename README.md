@@ -52,7 +52,7 @@ This project is still under development.
 
 ## Main Page
 
-<img src="https://cdn.discordapp.com/attachments/870962319625191428/1251766360925667338/image.png?ex=666fc5c5&is=666e7445&hm=cef1720e87eab792b8daf1e1f69ec24d51bc957de41b7bee3704eee0d657047e&">
+<img src="https://cdn.discordapp.com/attachments/870962319625191428/1251766360925667338/image.png?ex=667268c5&is=66711745&hm=e5a8c3d9f80f3817ce9b0de6373f3fcc4eb9856e42c30250c4b6cb67be7c9c6a&">
 
 ## Login Page
 <img src="https://cdn.discordapp.com/attachments/870962319625191428/1251766400184356945/image.png?ex=666fc5ce&is=666e744e&hm=ba5dc4b5400de2dd25431eb83e5731c50df861738e24214e0dce328e9cfc26d3&">
