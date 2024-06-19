@@ -8,6 +8,7 @@ import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
 import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
+import art.deerborg.bank.customer.repository.CustomerRepository;
 import art.deerborg.bank.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService service;
-    private final AuthenticationManager authenticationManager;
+    //private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final CustomerRepository repository;
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<CustomerResponse>> createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
@@ -44,18 +47,23 @@ public class CustomerController {
     public ResponseEntity<ApiResponse<List<CustomerDetailResponse>>> getAllCustomers() {
         return service.getAllCustomers();
     }
-    @PostMapping("/generateToken")
+    @GetMapping("/get-customer")
+    public ResponseEntity<ApiResponse<String>> customer(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return new ResponseEntity<>(ApiResponseHelper.OK(repository.findByEmail(email).get().getId()),HttpStatus.OK);
+    }
+    /*
+
+    @PostMapping("/login")
     public ResponseEntity<ApiResponse<String>> generateToken(@RequestBody CustomerEntity customer){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(customer.getEmail(), customer.getPassword()));
         if(authentication.isAuthenticated()){
             //return jwtService.generateToken(customer.getEmail());
-            return new ResponseEntity<>(ApiResponseHelper.OK(jwtService.generateToken(customer.getEmail())), HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponseHelper.OK("Bearer "+jwtService.generateToken(customer.getEmail())), HttpStatus.OK);
         }
         throw new RuntimeException("Authentication failed");
     }
 
-    @GetMapping("/test")
-    public String getTest(){
-        return "work";
-    }
+     */
 }

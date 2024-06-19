@@ -1,6 +1,8 @@
 package art.deerborg.bank.bank.service.impl;
 
 import art.deerborg.bank.bank.model.dto.request.AccountChangeBalanceRequest;
+import art.deerborg.bank.bank.model.dto.request.AccountTransferMoneyRequest;
+import art.deerborg.bank.bank.model.dto.response.AccountBalanceAndIbanResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountDetailResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountUpdateBalanceResponse;
@@ -31,15 +33,18 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public ResponseEntity<ApiResponse<AccountResponse>> addAccount(AccountEntity account) {
-
+    public ResponseEntity<ApiResponse<AccountBalanceAndIbanResponse>> addAccount(AccountEntity account) {
+        if(accountRepository.existsByCustomer(account.getCustomer())){
+            AccountEntity response = accountRepository.findByCustomer_Id(account.getCustomer().getId());
+            return new ResponseEntity<>(ApiResponseHelper.OK(accountMapper.toAccountBalanceAndIbanResponse(response)),HttpStatus.OK);
+        }
         account.setBankCode("1300011");
         account.setBalance(0.0);
         account.setIban(FinanceHelper.generateIban(account.getBankCode()));
         account.setFullName(customerRepository.findById(account.getCustomer().getId()).orElseThrow().getFullName());
 
         return new ResponseEntity<>(ApiResponseHelper.CREATE(accountMapper
-                .toAccountResponse(accountRepository.save(account))), HttpStatus.CREATED);
+                .toAccountBalanceAndIbanResponse(accountRepository.save(account))), HttpStatus.CREATED);
     }
 
     @Override
@@ -54,6 +59,14 @@ public class AccountServiceImpl implements AccountService {
 
         if(request.getBalance() <= 0){
             throw new InvalidBalanceException();
+        }
+        if(account.getBalance() >= 1000000.0){
+            account.setBalance(1000000.0);
+
+            AccountUpdateBalanceResponse updateBalanceResponse = accountMapper
+                    .toAccountUpdateBalanceResponse(accountRepository.save(account));
+
+            return new ResponseEntity<>(ApiResponseHelper.UPDATED(updateBalanceResponse),HttpStatus.OK);
         }
 
         account.setBalance(account.getBalance() + request.getBalance());
@@ -76,21 +89,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override // Will be refactored
-    public AccountEntity sendMoney(AccountEntity account) {
-        AccountEntity senderAccount = accountRepository.findById(account.getId()).orElseThrow(NotFoundIdException::new);
-        AccountEntity sendingAccount = accountRepository.findByIban(account.getIban());
+    public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> sendMoney(AccountTransferMoneyRequest request) {
+        AccountEntity senderAccount = accountRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
+        AccountEntity sendingAccount = accountRepository.findByIban(request.getIban());
 
         if(senderAccount.getBalance() <= 0){
             throw new InsufficientFundsException();
         }
-        if(senderAccount.getBalance() < account.getBalance()){
+        if(senderAccount.getBalance() < request.getBalance()){
             throw new InsufficientFundsException();
         }
 
-        sendingAccount.setBalance(account.getBalance() + sendingAccount.getBalance());
-        senderAccount.setBalance(senderAccount.getBalance() - account.getBalance());
+        sendingAccount.setBalance(request.getBalance() + sendingAccount.getBalance());
+        senderAccount.setBalance(senderAccount.getBalance() - request.getBalance());
 
         accountRepository.save(sendingAccount);
-        return accountRepository.save(senderAccount);
+        return new ResponseEntity<>(ApiResponseHelper.UPDATED(accountMapper.toAccountUpdateBalanceResponse(senderAccount)),HttpStatus.OK);
     }
 }

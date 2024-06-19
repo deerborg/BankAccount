@@ -34,7 +34,6 @@ public class BaseEntity {
         this.createdDateTime = LocalDateTime.now();
     }
 
-
     @Column(name = "UPDATED_CUSTOMER")
     @LastModifiedBy
     private String updatedCustomer;

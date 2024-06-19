@@ -1,6 +1,8 @@
 package art.deerborg.bank.bank.controller;
 
 import art.deerborg.bank.bank.model.dto.request.AccountChangeBalanceRequest;
+import art.deerborg.bank.bank.model.dto.request.AccountTransferMoneyRequest;
+import art.deerborg.bank.bank.model.dto.response.AccountBalanceAndIbanResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountDetailResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountUpdateBalanceResponse;
@@ -20,7 +22,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AccountResponse>> addAccount(@RequestBody AccountEntity account) {
+    public ResponseEntity<ApiResponse<AccountBalanceAndIbanResponse>> addAccount(@RequestBody AccountEntity account) {
         return accountService.addAccount(account);
     }
     @GetMapping
@@ -37,7 +39,7 @@ public class AccountController {
         return accountService.withdrawBalance(request);
     }
     @PutMapping("/transfer")
-    public AccountEntity sendMoney(@RequestBody AccountEntity account){
+    public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> sendMoney(@RequestBody AccountTransferMoneyRequest account){
         return accountService.sendMoney(account);
     }
 }
