@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -34,12 +35,15 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResponseEntity<ApiResponse<AccountBalanceAndIbanResponse>> addAccount(AccountEntity account) {
+
         if(accountRepository.existsByCustomer(account.getCustomer())){
             AccountEntity response = accountRepository.findByCustomer_Id(account.getCustomer().getId());
             return new ResponseEntity<>(ApiResponseHelper.OK(accountMapper.toAccountBalanceAndIbanResponse(response)),HttpStatus.OK);
         }
+
         account.setBankCode("1300011");
         account.setBalance(0.0);
+
         account.setIban(FinanceHelper.generateIban(account.getBankCode()));
         account.setFullName(customerRepository.findById(account.getCustomer().getId()).orElseThrow().getFullName());
 
@@ -79,6 +83,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> withdrawBalance(AccountChangeBalanceRequest request) {
+
         AccountEntity account = accountRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
         if(account.getBalance() <= 0 || account.getBalance() < request.getBalance()){
             throw new InsufficientFundsException();
@@ -88,10 +93,16 @@ public class AccountServiceImpl implements AccountService {
         return new ResponseEntity<>(ApiResponseHelper.UPDATED(response),HttpStatus.OK);
     }
 
-    @Override // Will be refactored
+    @Override
     public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> sendMoney(AccountTransferMoneyRequest request) {
+
         AccountEntity senderAccount = accountRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
         AccountEntity sendingAccount = accountRepository.findByIban(request.getIban());
+
+        if(Objects.equals(sendingAccount.getIban(), senderAccount.getIban())){
+            throw new InsufficientFundsException();
+            // Same Iban
+        }
 
         if(senderAccount.getBalance() <= 0){
             throw new InsufficientFundsException();
