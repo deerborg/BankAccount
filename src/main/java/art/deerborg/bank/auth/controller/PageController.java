@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class PageController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+//    private final AuthenticationManager authenticationManager;
+//    private final JwtService jwtService;
 
     @GetMapping("/welcome")
     public String welcome() {

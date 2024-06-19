@@ -11,12 +11,15 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
+
     CustomerEntity fromCustomerCreateRequest(CustomerCreateRequest customerCreateRequest);
+
+    CustomerResponse toCustomerResponse(CustomerEntity entity);
+
+    /*
     CustomerEntity fromCustomerUpdateRequest(CustomerUpdateRequest customerUpdateRequest);
     CustomerEntity fromCustomerCreateAccountRequest(CustomerCreateAccountRequest customerCreateAccountRequest);
     CustomerEntity fromCustomerLoginRequest(CustomerLoginRequest customerLoginRequest);
-
-    CustomerResponse toCustomerResponse(CustomerEntity entity);
     CustomerDetailResponse toCustomerDetailResponse(CustomerEntity entity);
-
+     */
 }

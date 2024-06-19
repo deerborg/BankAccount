@@ -2,6 +2,8 @@ package art.deerborg.bank.common.util.exceptions;
 
 import art.deerborg.bank.bank.model.util.excepitons.InsufficientFundsException;
 import art.deerborg.bank.bank.model.util.excepitons.InvalidBalanceException;
+import art.deerborg.bank.bank.util.exception.IbanConflictException;
+import art.deerborg.bank.bank.util.exception.NotFoundIban;
 import art.deerborg.bank.common.util.result.ApiResponse;
 import art.deerborg.bank.common.util.result.ApiResponseHelper;
 import org.springframework.expression.AccessException;
@@ -27,5 +29,13 @@ public class GlobalHandlerException {
     @ExceptionHandler(AccessException.class)
     public ResponseEntity<ApiResponse> handleAccessException() {
         return new ResponseEntity<>(ApiResponseHelper.ACTIVE_ACCOUNT(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(IbanConflictException.class)
+    public ResponseEntity<ApiResponse> handleIbanConflictException() {
+        return new ResponseEntity<>(ApiResponseHelper.IBAN_CONFLICT(),HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(NotFoundIban.class)
+    public ResponseEntity<ApiResponse> handleNotFoundIban() {
+        return new ResponseEntity<>(ApiResponseHelper.NOT_FOUND_IBAN(),HttpStatus.BAD_REQUEST);
     }
 }

@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper mapper;
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+
 //    private final AuthenticationManager authenticationManager;
 //    private final JwtService jwtService;
 
@@ -55,26 +57,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(CustomerUpdateRequest request) {
-        if (!customerRepository.existsById(request.getId())) {
-            throw new NotFoundIdException();
-        }
-        return new ResponseEntity<>(ApiResponseHelper.UPDATED(mapper
-                .toCustomerResponse(customerRepository
-                        .save(mapper.fromCustomerUpdateRequest(request)))), HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<ApiResponse<List<CustomerDetailResponse>>> getAllCustomers() {
-        return new ResponseEntity<>(ApiResponseHelper.OK(customerRepository
-                .findAll().stream().map(mapper::toCustomerDetailResponse).toList()), HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<ApiResponse<CustomerDetailResponse>> getCustomerById(String customerId) {
-        return new ResponseEntity<>(ApiResponseHelper.OK(mapper
-                .toCustomerDetailResponse(customerRepository
-                        .findById(customerId).orElseThrow(NotFoundIdException::new))), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> getAuthenticatedCustomerId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return new ResponseEntity<>(ApiResponseHelper.OK(customerRepository.findByEmail(email).get().getId()),HttpStatus.OK);
     }
 
 }

@@ -6,6 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccountUpdateBalanceResponse {
-    private String fullName;
     private Double balance;
 }

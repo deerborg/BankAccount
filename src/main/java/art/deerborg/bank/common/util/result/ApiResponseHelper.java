@@ -28,4 +28,10 @@ public class ApiResponseHelper {
     public static <T> ApiResponse <T> ACTIVE_ACCOUNT(){
         return new ApiResponse<>(false,"Account is already active");
     }
+    public static <T> ApiResponse <T> IBAN_CONFLICT(){
+        return new ApiResponse<>(false,"Iban belongs to you.");
+    }
+    public static <T> ApiResponse <T> NOT_FOUND_IBAN(){
+        return new ApiResponse<>(false,"Iban not found");
+    }
 }

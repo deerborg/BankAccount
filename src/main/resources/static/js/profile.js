@@ -5,7 +5,7 @@ function toggleMenu() {
 }
 
 window.onload = function() {
-    fetch('/customer/get-customer')
+    fetch('/customer')
         .then(response => response.json())
         .then(data => {
             if (data.status === true) {

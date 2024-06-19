@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class AccountDetailResponse {
     private String id;
-    private String fullName;
     private String bankCode;
     private String iban;
     private Double balance;

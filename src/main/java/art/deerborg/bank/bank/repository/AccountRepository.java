@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity,String> {
-    AccountEntity findByIban(String iban);
+    Optional<AccountEntity> findByIban(String iban);
     boolean existsByCustomer(CustomerEntity customer);
     AccountEntity findByCustomer_Id(String id);
 }

@@ -4,7 +4,6 @@ import art.deerborg.bank.bank.model.dto.request.AccountChangeBalanceRequest;
 import art.deerborg.bank.bank.model.dto.request.AccountTransferMoneyRequest;
 import art.deerborg.bank.bank.model.dto.response.AccountBalanceAndIbanResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountDetailResponse;
-import art.deerborg.bank.bank.model.dto.response.AccountResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountUpdateBalanceResponse;
 import art.deerborg.bank.bank.model.entity.AccountEntity;
 import art.deerborg.bank.bank.model.mapper.AccountMapper;
@@ -13,10 +12,11 @@ import art.deerborg.bank.bank.model.util.excepitons.InvalidBalanceException;
 import art.deerborg.bank.bank.repository.AccountRepository;
 import art.deerborg.bank.bank.service.AccountService;
 import art.deerborg.bank.bank.util.FinanceHelper;
+import art.deerborg.bank.bank.util.exception.IbanConflictException;
+import art.deerborg.bank.bank.util.exception.NotFoundIban;
 import art.deerborg.bank.common.util.exceptions.NotFoundIdException;
 import art.deerborg.bank.common.util.result.ApiResponse;
 import art.deerborg.bank.common.util.result.ApiResponseHelper;
-import art.deerborg.bank.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
-    private final CustomerRepository customerRepository;
     private final AccountMapper accountMapper;
 
 
@@ -45,7 +44,6 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(0.0);
 
         account.setIban(FinanceHelper.generateIban(account.getBankCode()));
-        account.setFullName(customerRepository.findById(account.getCustomer().getId()).orElseThrow().getFullName());
 
         return new ResponseEntity<>(ApiResponseHelper.CREATE(accountMapper
                 .toAccountBalanceAndIbanResponse(accountRepository.save(account))), HttpStatus.CREATED);
@@ -97,11 +95,10 @@ public class AccountServiceImpl implements AccountService {
     public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> sendMoney(AccountTransferMoneyRequest request) {
 
         AccountEntity senderAccount = accountRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
-        AccountEntity sendingAccount = accountRepository.findByIban(request.getIban());
+        AccountEntity sendingAccount = accountRepository.findByIban(request.getIban()).orElseThrow(NotFoundIban::new);
 
         if(Objects.equals(sendingAccount.getIban(), senderAccount.getIban())){
-            throw new InsufficientFundsException();
-            // Same Iban
+            throw new IbanConflictException();
         }
 
         if(senderAccount.getBalance() <= 0){

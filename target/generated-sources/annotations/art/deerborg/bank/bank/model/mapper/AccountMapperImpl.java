@@ -4,7 +4,6 @@ import art.deerborg.bank.bank.model.dto.request.AccountChangeBalanceRequest;
 import art.deerborg.bank.bank.model.dto.request.AccountTransferMoneyRequest;
 import art.deerborg.bank.bank.model.dto.response.AccountBalanceAndIbanResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountDetailResponse;
-import art.deerborg.bank.bank.model.dto.response.AccountResponse;
 import art.deerborg.bank.bank.model.dto.response.AccountUpdateBalanceResponse;
 import art.deerborg.bank.bank.model.entity.AccountEntity;
 import javax.annotation.processing.Generated;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-19T11:51:05+0300",
+    date = "2024-06-20T01:09:43+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -55,23 +54,9 @@ public class AccountMapperImpl implements AccountMapper {
 
         AccountUpdateBalanceResponse accountUpdateBalanceResponse = new AccountUpdateBalanceResponse();
 
-        accountUpdateBalanceResponse.setFullName( account.getFullName() );
         accountUpdateBalanceResponse.setBalance( account.getBalance() );
 
         return accountUpdateBalanceResponse;
-    }
-
-    @Override
-    public AccountResponse toAccountResponse(AccountEntity account) {
-        if ( account == null ) {
-            return null;
-        }
-
-        AccountResponse accountResponse = new AccountResponse();
-
-        accountResponse.setFullName( account.getFullName() );
-
-        return accountResponse;
     }
 
     @Override
@@ -83,7 +68,6 @@ public class AccountMapperImpl implements AccountMapper {
         AccountDetailResponse accountDetailResponse = new AccountDetailResponse();
 
         accountDetailResponse.setId( account.getId() );
-        accountDetailResponse.setFullName( account.getFullName() );
         accountDetailResponse.setBankCode( account.getBankCode() );
         accountDetailResponse.setIban( account.getIban() );
         accountDetailResponse.setBalance( account.getBalance() );
