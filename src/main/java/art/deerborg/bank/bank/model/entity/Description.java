@@ -1,5 +1,6 @@
 package art.deerborg.bank.bank.model.entity;
 
+import art.deerborg.bank.common.model.entity.BaseEntity;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Table(name = "descriptions")
 @Getter
 @Setter
-public class Description {
+public class Description extends BaseEntity {
     @Id
     @GeneratedValue
     @UuidGenerator

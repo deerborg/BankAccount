@@ -2,6 +2,7 @@ package art.deerborg.bank.customer.model.entity;
 
 import art.deerborg.bank.bank.model.entity.AccountEntity;
 import art.deerborg.bank.bank.model.entity.Description;
+import art.deerborg.bank.common.model.entity.BaseEntity;
 import art.deerborg.bank.customer.model.entity.enums.CustomerType;
 import art.deerborg.bank.customer.model.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,7 @@ import java.util.List;
 @Table(name = "customers")
 @Getter
 @Setter
-public class CustomerEntity implements UserDetails {
+public class CustomerEntity extends BaseEntity implements UserDetails{
     @Id
     @GeneratedValue
     @UuidGenerator
