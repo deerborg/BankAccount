@@ -20,5 +20,7 @@ public interface AccountService {
 
     ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> sendMoney(AccountTransferMoneyRequest request);
 
+    /*
     ResponseEntity<ApiResponse<List<AccountDetailResponse>>> getAllAccounts();
+     */
 }

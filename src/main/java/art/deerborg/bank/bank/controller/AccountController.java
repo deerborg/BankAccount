@@ -24,15 +24,10 @@ public class AccountController {
     public ResponseEntity<ApiResponse<AccountBalanceAndIbanResponse>> addAccount(@RequestBody AccountEntity account) {
         return accountService.addAccount(account);
     }
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<AccountDetailResponse>>> getAllAccounts() {
-        return accountService.getAllAccounts();
-    }
     @PutMapping("/add-balance")
     public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> addBalance(@RequestBody AccountChangeBalanceRequest request) {
         return accountService.addBalance(request);
     }
-
     @PutMapping("/withdraw")
     public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> withdrawBalance(@RequestBody AccountChangeBalanceRequest request){
         return accountService.withdrawBalance(request);

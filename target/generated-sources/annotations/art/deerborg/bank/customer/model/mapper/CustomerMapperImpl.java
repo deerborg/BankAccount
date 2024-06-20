@@ -1,10 +1,6 @@
 package art.deerborg.bank.customer.model.mapper;
 
-import art.deerborg.bank.customer.model.dto.request.CustomerCreateAccountRequest;
 import art.deerborg.bank.customer.model.dto.request.CustomerCreateRequest;
-import art.deerborg.bank.customer.model.dto.request.CustomerLoginRequest;
-import art.deerborg.bank.customer.model.dto.request.CustomerUpdateRequest;
-import art.deerborg.bank.customer.model.dto.response.CustomerDetailResponse;
 import art.deerborg.bank.customer.model.dto.response.CustomerResponse;
 import art.deerborg.bank.customer.model.entity.CustomerEntity;
 import javax.annotation.processing.Generated;
@@ -12,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-20T01:09:43+0300",
+    date = "2024-06-20T04:55:27+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.1 (Oracle Corporation)"
 )
 @Component
@@ -37,49 +33,6 @@ public class CustomerMapperImpl implements CustomerMapper {
     }
 
     @Override
-    public CustomerEntity fromCustomerUpdateRequest(CustomerUpdateRequest customerUpdateRequest) {
-        if ( customerUpdateRequest == null ) {
-            return null;
-        }
-
-        CustomerEntity customerEntity = new CustomerEntity();
-
-        customerEntity.setId( customerUpdateRequest.getId() );
-        customerEntity.setEmail( customerUpdateRequest.getEmail() );
-        customerEntity.setPhone( customerUpdateRequest.getPhone() );
-        customerEntity.setPassword( customerUpdateRequest.getPassword() );
-
-        return customerEntity;
-    }
-
-    @Override
-    public CustomerEntity fromCustomerCreateAccountRequest(CustomerCreateAccountRequest customerCreateAccountRequest) {
-        if ( customerCreateAccountRequest == null ) {
-            return null;
-        }
-
-        CustomerEntity customerEntity = new CustomerEntity();
-
-        customerEntity.setId( customerCreateAccountRequest.getId() );
-
-        return customerEntity;
-    }
-
-    @Override
-    public CustomerEntity fromCustomerLoginRequest(CustomerLoginRequest customerLoginRequest) {
-        if ( customerLoginRequest == null ) {
-            return null;
-        }
-
-        CustomerEntity customerEntity = new CustomerEntity();
-
-        customerEntity.setEmail( customerLoginRequest.getEmail() );
-        customerEntity.setPassword( customerLoginRequest.getPassword() );
-
-        return customerEntity;
-    }
-
-    @Override
     public CustomerResponse toCustomerResponse(CustomerEntity entity) {
         if ( entity == null ) {
             return null;
@@ -91,23 +44,5 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerResponse.setFullName( entity.getFullName() );
 
         return customerResponse;
-    }
-
-    @Override
-    public CustomerDetailResponse toCustomerDetailResponse(CustomerEntity entity) {
-        if ( entity == null ) {
-            return null;
-        }
-
-        CustomerDetailResponse customerDetailResponse = new CustomerDetailResponse();
-
-        customerDetailResponse.setId( entity.getId() );
-        customerDetailResponse.setFullName( entity.getFullName() );
-        customerDetailResponse.setBirthDate( entity.getBirthDate() );
-        customerDetailResponse.setEmail( entity.getEmail() );
-        customerDetailResponse.setPhone( entity.getPhone() );
-        customerDetailResponse.setPassword( entity.getPassword() );
-
-        return customerDetailResponse;
     }
 }

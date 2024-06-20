@@ -50,12 +50,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<List<AccountDetailResponse>>> getAllAccounts() {
-        return new ResponseEntity<>(ApiResponseHelper.OK(accountRepository.findAll().stream()
-                .map(accountMapper::toDetailResponse).toList()),HttpStatus.OK);
-    }
-
-    @Override
     public ResponseEntity<ApiResponse<AccountUpdateBalanceResponse>> addBalance(AccountChangeBalanceRequest request) {
         AccountEntity account = accountRepository.findById(request.getId()).orElseThrow(NotFoundIdException::new);
 

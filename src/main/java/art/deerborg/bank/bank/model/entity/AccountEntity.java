@@ -16,7 +16,6 @@ public class AccountEntity extends BaseEntity {
     @GeneratedValue
     @UuidGenerator
     private String id;
-    private String fullName;
     private String bankCode;
     @Column(unique = true)
     private String iban;

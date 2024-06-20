@@ -16,6 +16,7 @@ public interface AccountMapper {
 
     AccountUpdateBalanceResponse toAccountUpdateBalanceResponse(AccountEntity account);
     AccountDetailResponse toDetailResponse(AccountEntity account);
+
     @Mapping(source = "id",target = "id")
     AccountBalanceAndIbanResponse toAccountBalanceAndIbanResponse(AccountEntity account);
 }
