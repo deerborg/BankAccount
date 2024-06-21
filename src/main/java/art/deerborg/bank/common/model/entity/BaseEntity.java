@@ -9,7 +9,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -20,9 +19,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 //@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
-    @Column(name = "CREATED_CUSTOMER")
+    @Column(name = "CREATED")
     @CreatedBy
-    private String createdCustomer;
+    private String created;
 
     @Column(name = "CREATED_AT")
     @CreatedDate
@@ -30,13 +29,13 @@ public class BaseEntity {
 
     @PrePersist
     public void prePersist(){
-        this.createdCustomer = "deer";
+        this.created = "deer";
         this.createdDateTime = LocalDateTime.now();
     }
 
-    @Column(name = "UPDATED_CUSTOMER")
+    @Column(name = "UPDATED")
     @LastModifiedBy
-    private String updatedCustomer;
+    private String updated;
 
     @Column(name = "UPDATED_AT")
     @LastModifiedDate
@@ -44,7 +43,7 @@ public class BaseEntity {
 
     @PreUpdate
     public void preUpdate(){
-        this.updatedCustomer = "deer";
+        this.updated = "deer";
         this.updatedDateTime = LocalDateTime.now();
     }
 }

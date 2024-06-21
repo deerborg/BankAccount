@@ -1,0 +1,2 @@
+2024-06-21 15:06:17.283 [http-nio-8080-exec-7] DEBUG a.d.b.c.logger.CustomerLoggerAspect - Method getAuthenticatedCustomerId() - arguments: []
+2024-06-21 15:06:17.292 [http-nio-8080-exec-7] DEBUG a.d.b.c.logger.CustomerLoggerAspect - Method getAuthenticatedCustomerId() - result: <200 OK OK,art.deerborg.bank.common.util.result.ApiResponse@66077bc0,[]> - execution time: 9 ms

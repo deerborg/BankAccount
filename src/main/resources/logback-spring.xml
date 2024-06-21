@@ -1,0 +1,62 @@
+<configuration>
+    <!-- Konsol Appender: Logları konsola (terminal) yazdırır -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Log formatını belirler -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Dosya Appender: Logları dosyaya yazar -->
+    <appender name="bankFile" class="ch.qos.logback.core.FileAppender">
+        <!-- Log dosyasının yolu -->
+        <file>logs/bank-service.log</file>
+        <append>true</append>
+        <encoder>
+            <!-- Log formatını belirler -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="customerFile" class="ch.qos.logback.core.FileAppender">
+        <!-- Log dosyasının yolu -->
+        <file>logs/customer-service.log</file>
+        <append>true</append>
+        <encoder>
+            <!-- Log formatını belirler -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <appender name="generalFile" class="ch.qos.logback.core.FileAppender">
+        <!-- Log dosyasının yolu -->
+        <file>logs/general.log</file>
+        <append>true</append>
+        <encoder>
+            <!-- Log formatını belirler -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Banka servisleri logger'ı: Banka servisleri için log seviyesini DEBUG yapar -->
+    <logger name="art.deerborg.bank.bank.logger.BankLoggerAspect" level="DEBUG" additivity="false">
+        <appender-ref ref="bankFile"/>
+    </logger>
+
+    <!-- Müşteri servisleri logger'ı: Müşteri servisleri için log seviyesini DEBUG yapar -->
+    <logger name="art.deerborg.bank.customer.logger.CustomerLoggerAspect" level="DEBUG" additivity="false">
+        <appender-ref ref="customerFile"/>
+    </logger>
+
+
+    <logger name="art.deerborg.bank.common.config.logger.LoggingAspect" level="DEBUG" additivity="false">
+        <appender-ref ref="generalFile"/>
+    </logger>
+
+    <!-- Varsayılan log seviyesi INFO olarak ayarlanır ve console appender kullanılır -->
+    <root level="INFO">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>
