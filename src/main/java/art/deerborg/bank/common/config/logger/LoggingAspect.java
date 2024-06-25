@@ -29,5 +29,6 @@ public class LoggingAspect {
         long endTime = System.currentTimeMillis() - startTime;
         logger.debug("Method {}() - result: {} - execution time: {} ms", joinPoint.getSignature().getName(), result, endTime);
         return result;
+        //
     }
 }
